@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>选项卡</title>
+	<style type="text/css">
+		body,html,div,ul,li,a{margin:0px; padding:0px;font-family:"微软雅黑",Arial;list-style:none;}
+		.notice{
+			height:180px; width:298px;
+			border:solid 1px #eee;
+			overflow:hidden; margin:0px auto;
+		}
+		.ne_title{
+			height:27px; position:relative;
+			background:#f7f7f7;
+		}
+		.ne_title ul{
+			width:301px; position:absolute;
+			left:-1px;
+		}
+		.ne_title li{
+			float:left; width:58px;
+			height:26px; line-height:26px;
+			text-align:center; overflow:hidden;
+			background:#eee; border-bottom:1px solid #ccc;
+			padding:0px 1px;
+		}
+		.ne_title li a:link,.ne_title li a:visited{
+			text-decoration:none; color:black;
+			width:58px;display:block;
+		}
+		.ne_title li a:hover{color:#f90;}
+		.ne_title li.select{
+			background:white; font-weight:bolder;
+			border-bottom:1px solid white;
+			border-left:1px solid #ccc;border-right:1px solid #ccc;
+			padding:0;
+		}
+		.ne_cont .mod {margin-top:20px;text-align:center;}
+		.ne_cont .mod ul li{
+			float:left; width:148px;
+			height:30px; font-size:14px;
+			line-height:30px;
+		}
+		.noVisiable{display:none;}
+	</style>
+	<script type="text/javascript" src="js/simpleGet.js"></script>
+	
+	
+</head>
+<body>
+<div id="notice" class="notice">
+	<div class="ne_title" id="title">
+		<ul>
+			<li class="select"><a href="javascript:">公告1</a></li>
+			<li><a href="javascript:">公告2</a></li>
+			<li><a href="javascript:">公告3</a></li>
+			<li><a href="javascript:">公告4</a></li>
+			<li><a href="javascript:">公告5</a></li>
+		</ul>
+	</div>
+	<div class="ne_cont" id="neCont">
+		<div class="mod">
+			<ul>
+				<li><a href="javascript:">这是一个古老的传说</a></li>
+				<li><a href="javascript:">这是一个古老的传说</a></li>
+				<li><a href="javascript:">这是一个古老的传说</a></li>
+				<li><a href="javascript:">这是一个古老的传说</a></li>
+			</ul>
+		</div>
+		<div class="mod noVisiable">
+			<ul>
+				<li><a href="javascript:">遥远的东方有一条龙</a></li>
+				<li><a href="javascript:">遥远的东方有一条龙</a></li>
+				<li><a href="javascript:">遥远的东方有一条龙</a></li>
+				<li><a href="javascript:">遥远的东方有一条龙</a></li>
+			</ul>
+		</div>
+		<div class="mod noVisiable">
+			<ul>
+				<li><a href="javascript:">它的名字叫中国</a></li>
+				<li><a href="javascript:">它的名字叫中国</a></li>
+				<li><a href="javascript:">它的名字叫中国</a></li>
+				<li><a href="javascript:">它的名字叫中国</a></li>
+			</ul>
+		</div>
+		<div class="mod noVisiable">
+			<ul>
+				<li><a href="javascript:">黑眼睛黑头发黄皮肤</a></li>
+				<li><a href="javascript:">黑眼睛黑头发黄皮肤</a></li>
+				<li><a href="javascript:">黑眼睛黑头发黄皮肤</a></li>
+				<li><a href="javascript:">黑眼睛黑头发黄皮肤</a></li>
+			</ul>
+		</div>
+		<div class="mod noVisiable">
+			<ul>
+				<li><a href="javascript:">爱，谁也说不清楚</a></li>
+				<li><a href="javascript:">爱，谁也说不清楚</a></li>
+				<li><a href="javascript:">爱，谁也说不清楚</a></li>
+				<li><a href="javascript:">爱，谁也说不清楚</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<script type= "text/javascript">
+		
+/**window.onload = function(){
+	function $(id){
+		return typeof id === "string"?document.getElementById(id):id;
+	}
+	var timer;
+	var tabTitle = $("title").getElementsByTagName("li"),
+		contNum = $("neCont").getElementsByTagName("div");//alert(contNum.length+" ,"+tabTitle.length);
+	if(tabTitle.length != contNum.length){
+		return;
+	}
+	var index = 0;
+	if(timer){
+		clearTimeout(timer);
+		timer = null;
+	}
+	timer = setInterval(aniTab,2000);
+	
+	function aniTab(){	
+		index++;	
+		if(index >=tabTitle.length){
+			index = 0;
+		}
+		changeTab(index);
+	}
+	for(var i=0;i<tabTitle.length;i++){
+		tabTitle[i].id = i;	//为每个选项卡设置id值用于匹配对应版块
+		tabTitle[i].onmouseover = function(){
+			if(timer){
+				clearTimeout(timer);
+				timer = null;
+			}
+			changeTab(this.id);
+		}
+		tabTitle[i].onmouseout = function(){
+			index = this.id;
+			timer = setInterval(aniTab,2000);
+		}
+	}	
+	//改变选项卡和与之对应的版块内容
+	function changeTab(id){
+		for(var j=0;j<tabTitle.length;j++){
+			tabTitle[j].className = "";
+			contNum[j].className = "noVisiable";
+		}
+		tabTitle[id].className = "select";
+		contNum[id].className = "mod";
+	}
+	
+	//setTimeout(autoTab,1000);
+	//setTimeout(autoTab,1500);
+	/**for(var i=0;i<tabTitle.length;i++){
+		tabTitle[i].id = i;
+		tabTitle[i].onclick = function(){
+			//设置timer用于延迟切换
+			if(timer){
+				clearTimeout(timer);
+				timer = null;
+			}
+			var oLi = this;
+			timer = setTimeout(function(){
+				for(var j =0;j<tabTitle.length;j++){
+					tabTitle[j].className = "";
+					contNum[j].className = "mod noVisiable";
+				}
+				tabTitle[oLi.id].className = "select";
+				contNum[oLi.id].className = "mod";
+			},300);
+			
+		}
+	}	
+	
+}**/
+</script>
+<script type="text/javascript" src="js/tab.js"></script>
+</body>
+</html>
