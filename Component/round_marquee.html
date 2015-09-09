@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>滚动效果</title>
+	<style type="text/css">
+		html,body,div,p,dl,dt,ul,li,a{
+			padding:0px; margin:0px;list-style:none;
+			font-family:"微软雅黑",Arial;
+			text-decoration:none;
+		}
+		#scPanel{
+			width:500px;margin:20px auto; height:150px;
+			border:solid 2px red;padding-bottom:10px;
+			position:relative;
+			overflow:hidden;
+		}
+		.sctitle{
+			height:30px; background:red; color:white;
+			padding-left:10px; font-size:20px;
+			position:absolute; width:490px; top:0px;
+		}
+		.newsList{
+			padding-left:10px;
+			overflow:hidden;
+		}
+		.newsList>li{margin-bottom:10px;height:24px;}
+		a{color:black;height:24px;}
+		a:hover{color:red;text-decoration:underline;}
+		#pan1{
+			position:relative; top:1px;
+		}
+	</style>
+</head>
+<body>
+
+	<div style="width:500px;margin:0px auto;border:solid 1px red;">
+		<dl>
+			<dt>文字滚动(默认)：</dt>
+			<dd><marquee onmouseOver="this.stop()" onmouseOut="this.start()">默认的滚动方式</marquee></dd>
+		</dl>
+		<dl>
+			<dt>文字滚动(从左往右滚动)：</dt>
+			<dd><marquee onmouseOver="this.stop()" onmouseOut="this.start()" direction="right">从左往右滚动</marquee></dd>
+		</dl>
+		<dl>
+			<dt>文字滚动：</dt>
+			<dd><marquee scrollamount="2" scrolldelay="100" behavior="alternate" loop="-1" width="250px">来回滚动的文字是我。。。</marquee></dd>
+		</dl>
+	</div>
+
+<div id="scPanel">
+	<!--<div class="sctitle">热门搜索</div>-->
+	<ul class="newsList" id="pan1">
+		<li><a href="javascript:">1.在那遥远的地方，有位好姑娘。。。</a></li>
+		<li><a href="javascript:">2.我独自走过的身旁，我没有话要对你讲。。。</a></li>
+		<li><a href="javascript:">3.如果这都不算爱，还有什么好悲哀。。。</a></li>
+		<li><a href="javascript:">4.灯火熄灭了，影子暗淡了，我的心又开始想你了。。。</a></li>
+		<li><a href="javascript:">5.我忘了告诉你，最爱的是你，现在想起来，最爱的是你。。。</a></li>
+		<li><a href="javascript:">6.有多久没见你，以为你在那里，原来你就住在我心底。。。</a></li>
+		<li><a href="javascript:">7.灯火熄灭了，影子暗淡了，我的心又开始想你了。。。</a></li>
+		<li><a href="javascript:">8.我忘了告诉你，最爱的是你，现在想起来，最爱的是你。。。</a></li>
+		<li><a href="javascript:">9.有多久没见你，以为你在那里，原来你就住在我心底。。。</a></li>
+	</ul>
+	<ul class="newsList" id="pan2"></ul>
+</div>
+
+<script type="text/javascript" src="js/aniText.js"></script>
+</body>
