@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>企业网站</title>
+<script type="text/javascript" src="js/myfocus-2.0.1.min.js"></script>
+<link href="css/main1.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript">
+window.onload=function(){
+	myFocus.set({
+		id:'myFocus',//焦点图盒子ID
+		pattern:'mF_fancy',//风格应用的名称
+		time:3,//切换时间间隔(秒)
+		trigger:'click',//触发切换模式:'click'(点击)/'mouseover'(悬停)
+		width:1000,//设置图片区域宽度(像素)
+		height:310,//设置图片区域高度(像素)
+		txtHeight:'default'//文字层高度设置(像素),'default'为默认高度，0为隐藏
+	});
+	
+	var oNews = document.getElementById("newsPanel"),
+		oList = document.getElementById("newsList"),
+		oList1 = document.getElementById("newsList1")
+		listNews = oList.getElementsByTagName("li");
+	var timer=0;
+	var newsH = listNews[0].offsetHeight;
+	//alert(newsH)
+	oList1.innerHTML = oList.innerHTML;
+	function newsAuto(){
+		var listH = oList.offsetHeight;
+		if(oNews.scrollTop %newsH == 0){
+			clearTimeout(timer);
+			setTimeout(startNews,1500);
+		}else{
+			if(oNews.scrollTop>=listH){
+				oNews.scrollTop = 0;
+			}else{
+				oNews.scrollTop ++;
+			}
+		}
+	}
+	
+	function startNews(){
+		oNews.scrollTop++;
+		timer = setInterval(newsAuto,50);
+	}
+	
+	setTimeout(startNews,1000);
+}
+</script>
+</head>
+<body>
+<div id="header">
+	<div class="logo"><img src="img/logo.jpg"/></div>
+	<div class="nav">
+		<ul>
+			<li><a href="#" class="active">首页</a></li>
+			<li><a href="#">产品特色</a></li>
+			<li><a href="#">解决方案</a></li>
+			<li><a href="#">产品价格</a></li>
+			<li><a href="#">帮助中心</a></li>
+			<li><a href="#">关于我们</a></li>
+		</ul>
+		<div class="nav_right">
+			<form action="post" class="search">
+				<input type="text" class="search_text">
+				<input type="button" value="搜索">
+			</form>
+		</div>
+	</div><!--nav结束-->
+</div><!--header结束-->
+<div id="myFocus"><!--焦点图盒子-->
+  <div class="loading"><img src="img/loading.gif" alt="请稍候..." /></div><!--载入画面(可删除)-->
+  <div class="pic"><!--内容列表(li数目可随意增减)-->
+	<ul>
+		<li><a href="#"><img src="img/ad2.jpg" thumb=""  /></a></li>
+		<li><a href="#"><img src="img/ad3.jpg" thumb="" /></a></li>
+		<li><a href="#"><img src="img/ad4.jpg" thumb=""  /></a></li>
+	</ul>
+  </div>
+</div><!--焦点图结束-->
+<div id="hotNews">
+	<div class="hot_news"><a href="#">热门新闻</a></div>
+	<div class="news_list" id="newsPanel">
+		<ul id="newsList">
+			<li><a href="#">全新锋范上市 售7.98-11.98万元</a></li>
+			<li><a href="#">定位CR-V之上本田新SUV谍照曝光</a></li>
+			<li><a href="#">全新途观更多细节曝光 车身加长</a></li>
+			<li><a href="#">宁泽涛赤裸上身秀球技 大风车扣篮不要太轻松!</a></li>
+			<li><a href="#">哪场战役令日军首脑哀叹是华南最丢脸一战</a></li>
+			<li><a href="#">新华社要求日本天皇就战争道歉 日本官方回应</a></li>
+			<li><a href="#">宁泽涛赤裸上身秀球技 大风车扣篮不要太轻松!</a></li>
+			<li><a href="#">哪场战役令日军首脑哀叹是华南最丢脸一战</a></li>
+			<li><a href="#">新华社要求日本天皇就战争道歉 日本官方回应</a></li>
+		</ul>
+		<ul id="newsList1"></ul>
+	</div>
+</div><!--滚动新闻-->
+<div id="productPic">
+	<div class="spic spicL">
+		<a href="#"><img src="img/bs.jpg"/></a>
+		<div class="ptitle"><a href="#">玩转BootStrap</a></div>
+	</div>
+	<div class="spic spicM">
+		<a href="#"><img src="img/css.jpg"/></a>
+		<div class="ptitle"><a href="#">企业网站案例</a></div>
+	</div>
+	<div class="spic spicR">
+		<a href="#"><img src="img/js.jpg"/></a>
+		<div class="ptitle"><a href="#">Javascript基础</a></div>
+	</div>
+</div><!--课程图片-->
+
+<div id="main">
+	<div class="main_cont">
+		<div class="main_title">新闻中心</div>
+		<div class="news_text">
+			<ul>
+				<li>
+					<div class="npic">8月28日</div>
+					<div class="n_box">
+						<span class="n_title"><a href="#" title="Android">学习计划之Android攻城狮初养成</a></span>
+						<p class="n_text">
+							想成为Android攻城狮？想开发一款专属APP？没有任何基础的你，应该从何学起？
+						</p>
+					</div>
+				</li>
+				<li>
+					<div class="npic">8月28日</div>
+					<div class="n_box">
+						<span class="n_title"><a href="#">学习计划之Android攻城狮初养成</a></span>
+						<p class="n_text">
+							想成为Android攻城狮？想开发一款专属APP？没有任何基础的你，应该从何学起？
+						</p>
+					</div>
+				</li>
+				<li>
+					<div class="npic">8月28日</div>
+					<div class="n_box">
+						<span class="n_title"><a href="#">学习计划之Android攻城狮初养成</a></span>
+						<p class="n_text">
+							想成为Android攻城狮？想开发一款专属APP？没有任何基础的你，应该从何学起？
+						</p>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="main_cont main_cont_mid">
+		<div class="main_title">热门活动</div>
+		<div class="service_text">
+			<div class="activity"><img src="img/2048.jpg"/></div>
+			<div class="activity_text">
+				<ul>
+					<li><a href="#" title="2048">慕课网2048游戏源码征集</a></li>
+					<li><a href="#" title="2048">慕课网2048游戏源码征集</a></li>
+					<li><a href="#" title="2048">慕课网2048游戏源码征集</a></li>
+					<li><a href="#" title="2048">慕课网2048游戏源码征集</a></li>
+					<li><a href="#" title="2048">慕课网2048游戏源码征集</a></li>
+					<li><a href="#" title="2048">慕课网2048游戏源码征集</a></li>
+					<li><a href="#" title="2048">慕课网2048游戏源码征集</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="main_cont">
+		<div class="main_title">联系我们</div>
+		<div class="contact_text">
+			<div class="client_text">
+				<ul>
+					<li>讲师招募</li>
+					<li>邹同学</li>
+					<li>电话：12389830839</li>
+					<li>QQ:83973483</li>
+					<li>Email:23234@163.com</li>
+				</ul>
+			</div>
+			<div class="client_text">
+				<ul>
+					<li>网站合作</li>
+					<li>吕同学</li>
+					<li>电话：12389830839</li>
+					<li>QQ:83973483</li>
+					<li>Email:23234@163.com</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer>Copyright © 2015 imooc.com All Rights Reserved | 京ICP备 13046642号-2</footer>
+</body>
+</html>
