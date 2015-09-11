@@ -1,0 +1,27 @@
+﻿文献来源：
+http://learn.shayhowe.com/advanced-html-css/
+
+--主要内容--
+1.Performance & Organization-页面组织和架构
+2.Detailed Positioning-如何详细定位
+3.Complex Selectors-选择器的介绍 
+4.Responsive Web Design-响应式网页设计
+5.Preprocessors-预处理命令[在进行中 15:13 9/11/2015】]
+6.jQuery
+7.Transform-变换
+8.Transition&Animation-渐变和动画
+9.Feature Support & Polyfills-属性支持和填充
+10.Extending Semantics & Accessibility-扩展的语义及辅助功能
+
+
+    
+    
+    
+    
+    
+
+
+    
+    
+
+

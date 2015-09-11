@@ -1,0 +1,177 @@
+﻿1.web标准【结构、样式和行为分离】一切为了提高网页性能和可维护性
+	结构标准：xml标准、xhtml标准和html标准
+	样式标准：css标准
+	行为标准：DOM标准和ECMAScript标准
+ 【标准的网页】：标签名全小写，属性有引号。
+	样式和行为不夹杂在标签里而应单独放在样式文件和脚本文件中。
+2.打造高质量代码
+	精简：让文件变小，更有利于客户端下载
+	重用：使代码更易于精简，提升开发速度
+	有序：更为清晰的组织代码，提高维护性
+
+3.怎样才算的上是前端工程师
+	1）熟练的css基本功，至少要能兼容各大浏览器
+	2）熟练使用原生JavaScript以及相应类库和AJAX
+	3）对后端程序语言要有一定了解（以PHP为例，只需知道$,echo,	         $_REQUEST[]、d单引号和双引号的区别、session、cookie即可）
+	4）对网页重构和语义化有一定认识
+	
+4.欲精一行，必先通十行
+
+5.多注释，增强代码可读性
+  提高重用性，使用公共组件和私有组件【存在精简性和方便性的悖论 eg:jQuery和YUI】
+
+6.前期构想很重要（规范的制定，公共组件的设计和复杂功能的技术方案 30%-60%）
+
+7.语义化标签，使用标签来判断内容的语义，让浏览器更好的认识网页
+
+8.CSS布局：先确定HTML，确定语义的标签，再来选用合适的CSS。
+
+9.判断网页标签语义是否良好：去掉样式，看网页结构是否组织良好有序，可读性是否良好。
+  在使用h1-h6这种标题标签时应不要出现断层使用。
+
+10.表单域要使用fieldset标签包起来，并用legend标签说明表单的用途
+   每个input标签对应的文本说明使用label标签，并在label中设置"for=someId"对应到input的id属性。如：
+   <label for="name">账号：</label><input type="text" id="name">
+
+11.在必要的时候使用table布局效果更好
+ <table>
+  <caption></caption>
+  <thead><tr><<th></th>th></th></tr></thead>
+  <tbody>
+	<tr><td></td></tr>
+  </tbody>
+ </table>
+
+12.尽可能减少使用无语义标签div和span，
+   当语义不明且既可以使用p也可以使用div时尽量使用p，
+   不使用纯样式标签b，font，u之类的而改用css设置，
+   语义上有强调意味的使用strong（加粗）或em（斜体）标签
+
+---高质量的css---
+1.标准模式（符合规范）和怪异模式（模拟老式浏览器）【常见问题是盒子模型和块级元素居中】
+  避免使用怪异模式
+
+2.DTD（文档类型定义）
+  包含了元素的定义规则、元素间关系的定义规则、元素可使用的属性、可使用的实体和符号规则
+  1）用于HTML 4.01的严格型
+  2）用于HTML 4.01的过渡型
+  3）用于XHTML 1.0的严格型
+  4）用于XHTML 1.0的过渡型
+  如果漏写了DTD声明，IE6-8会触发怪异模式，所以声明DTD非常重要。
+
+3.组织CSS
+  方法：base.css + common.css + page.css【层叠关系】
+	base层是最底层，给所用页面通用【稳定性好，改动应该少】
+	common层是网站级，不同的网站有不同的common层【最好由一人负责管理】
+	page层是页面级 【放入网站关于page层的代码，配上注释分块书写】
+
+4.模块化CSS【数量少，结构简单】
+  1）模块和模块之间尽量不包含相同内容，如有则提取出来成为独立的模块
+  2）CSS命名【驼峰命名&划线命名组合使用】
+	驼峰用于区分不同的单词，划线用于表明从属关系
+	团队合作时使用前缀区分个各个page层内容
+	多用组合，少用继承
+  模块的上下边距不是很确定的时候，不把margin写进模块类中，不混用margin-top和margin-bottom
+
+5.低权重原则
+  HTML=1；	class=10;	  id=100;
+  当css选择符权重相同时，样式遵循就近原则，后定义的样式则会被选中
+  尽量不用子选择器，CSS选择符也要保证权重尽可能低
+  是否使用css sprite技术取决于网站流量
+6.推荐使用css一行编码风格
+7.CSS hack
+  1）IE条件注释法	
+  <!--[if gt IE 6]> [lte,lt,gte,gt,!]
+  <link type="text/css" ...../>或
+  <style type="text/css"></style>或
+  <script type="text/javascript"></script>
+  <![endif]-->
+  2)选择符前缀法
+  *html前缀只对IE6生效，*+html前缀只对IE7生效
+  .test{}	*html .test{}	*+html .test{}
+  3）样式属性前缀法
+  _前缀只对IE6生效，*前缀在IE6和IE7下生效
+
+8.a标签love hate原则：l（link）ov（visited）e h（hover）a（active）te
+ 
+9.可以使用zoom:1来触发hasLayout。不起作用时可以设置position：relative
+
+10.position设置为absolute或float会隐式改变display类型为inline-block
+
+11.居中
+   -----水平居中-----
+	·行内元素【在父元素中设置text-align：center】
+	·块级元素【设置宽度后margin：0 auto;]
+	·不确定宽度的块级元素
+		1）使用table标签
+		2）改变块级元素为inline，然后设置text-align
+		3）父元素设置relative，left：50%；
+		  子元素设置relative，left：-50%；
+   -----垂直居中-----
+	·父元素高度不确定【设置相同的上下padding值】
+	·父元素高度确定的单行文本【设置与父元素高度相同的line-height】
+	·父元素高度确定的多文本、图片块级元素
+	 1）使用表格
+	 2）用table-cell，不支持的父子层分别设置top:50%、top:-50%
+
+12.网格布局
+13.图片透明png
+
+
+---高质量JavaScript---
+1.避免js冲突
+  1）使用匿名函数（function（）{}）（）可控制全局变量，避免冲突隐患
+  2）合理使用命名空间
+  var GLOBAL={};
+  GOLBAL.namespace=function（str）{
+	var arr = str.split（"."）,o=GLOBAL;
+	for(i=(arr[0]="GLOBAL")?1:0;i<arr.length;i++){
+		o[arr[i]]=o[arr[i]]||{};
+		o=o[arr[i]];
+  	}
+  }
+  3）添加必要的注释
+
+2.为所有js片段找一个统一入口【假定所有脚本包含在名为init的函数中】
+  1）jquery的为 $(document).ready(init)
+  2）YUI导入yahoo-dom-event.js使用			YAHOO.util.Event.onDOMReady(init)
+  3）原生的js建议把init函数放在</body>标签前
+
+3.框架部分内容可以使用服务器端语言的include命令包含到页面中
+
+4.css放在页头，JavaScript放在页尾，并且均可在发布之前进行压缩
+
+5.设置透明度
+  function setOpacity(node,level){
+	node = typeof node=="string"?document.getElementById(node):node;
+	if(document.all){
+		node.style.filter = 'alpha(opacity=' +level+ ')';
+	}else{
+		node.sytle.opacity=level/100;
+	}
+  }
+  setOpacity("test",20);
+
+6.表单验证忽略空格和缩进
+  function trim(ostr){
+	retrun ostr.replace(/^\s+|\s+$/g,"");
+  }
+
+7.类型判断
+  function isNumber(s){return !isNaN(s);}
+  function isString(s){return typeof s==="string";}
+  function isBoolean(s){return typeof s==="boolean";}
+  function isEmpty(s){return /^\s*$/.test(s);}
+  function isArray(s){ return s instanceof Array;}
+
+8.简化document.getElementById("id")
+  function get(node){
+	node = typeof node=="string"?document.getElementById(node):node;
+	return node;	
+  }
+
+9.对于常规属性，统一使用node.XXX的方式读取；
+  对于自定义属性，统一使用node.getAttribute（"XXX"）读取
+
+10.<style>的DOM节点在FF中可以直接对innerHTML属性进行写操作
+   但在IE下，要通过styleSheet.cssText进行操作
