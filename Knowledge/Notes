@@ -1,0 +1,266 @@
+---Chapter 4 变量，作用域和内存问题---
+1.基本类型和引用类型的值
+ECMAScript包含两种不同数据类型的值：基本类型值和引用类型值
+	基本类型值是指简单的数据段
+	引用类型值是指可能由多个值构成的对象
+javascript不允许访问内存中的位置，即不能直接操作对象的存储空间
+
+---Chapter5 引用类型---
+1.Object 类型
+	1）new+Object构造函数  eg:var person = new Object();
+	2)对象字面量	eg:var person={name:"Bob",age:32};
+2.Array 类型
+	1）使用Array构造函数   eg:var colors = new Array(); var colors = Array();
+		var colors = new Array(3); var colors = new Array("red","blue");
+	2)数组字面量	    var colors = ["red","blue","green"];
+	3）push()方法接收任意数量的参数，逐个添加到数组末尾，返回数组长度
+	   pop()方法从数组末尾移除最后一项，减少数组长度，返回删除的项
+	   shift()方法移除数组的第一项并返回，同时数组长度减一
+	   unshift()方法可在数组前端添加任意多个项并返回新数组长度
+	模拟队列：shift(),push()		反方向模拟队列：unshift(),pop()
+	4）reverse()方法用于反转数组	
+	   sort()方法用于数组排序【但都转为字符串比较】
+	  eg:funcion compare(val1,val2){//此方法用于升序，降序把返回值互换即可
+		if(val1 < val2){return -1;}
+		else if(val1>val2){return 1;}
+		else{return 0;}
+		//或者直接使用下面语句
+		return val1-val2;
+	    }
+	  var values = [0,2,22,3,5,32];
+	  values.sort(compare);
+	reverse()和sort()会改变原来数组
+	5)concat()基于当前数组创建一个新的副本，并把参数添加到该副本后面返回新的数组
+	6)slice()接收一到两个参数创建一个新数组【改方法不会影响原来数组】
+		一个参数：返回从该参数指定位置到数组末尾的所有项
+		两个参数：返回从起始到结束但不包括结束位置的所有项
+	  如果参数为负数，用数组长度加上该数来确定位置；如果结束位置小于起始位置返回空数组
+	  如果起始数小于0则强制为从0开始，若结尾数大于数组长度强制为数组长度
+	7)splice()该方法返回的是一个数组，包含从原始数组中删除的项，如果没有删除则返回的是空数组
+	  --删除:删除任意数量的项，指定2个参数：删除的起始位置和项数
+	  --插入和替换:可以向指定位置插入任意数量的项，且可同时删除任意数量的项。指定3个参数：起始位置，0(要删除的项数)和要插入的项(可以是多个项)
+	8)indexOf()和lastIndexOf()接收两个参数：要查找的项和（可选）表示查找起点位置的索引【返回的是要查找元素的位置】
+	  indexOf()从数组开头往后找	lastIndexOf()从数组末尾开始往前找
+	9）迭代方法【每个方法接收两个参数，一个是要给定的函数，一个是（可选的）运行该函数的对象】其中给定的函数包含三个参数：数值项的值，该项在数组的位置以及数组对象本身
+	  every():对数组中每一项运行给定的函数，如果该函数对每一项都返回true，则返回true
+	  filter():对数组中每一项运行给定函数，返回该函数会返回true的项组成的数组
+	  forEach():对数组每一项运行给定函数，这个方法没有返回值
+	  map():对数组每一项运行给定函数，返回每次函数调用的结果组成的数组。
+	  some():对数组每一项运行给定函数，如果该函数对任一项返回为true，则返回true；
+	eg:var numbers=[1,2,3,4,5,4,3,2,1];
+	  var everyResult = numbers.every(function(itme,index,array){return (item>2)}
+	  alert(everyResult);	//false
+
+3.Date 类型
+	1）使用Date()构造方法新建对象,返回的是当前时间    var now = new Date()
+	2)根据特定的时间创建对象	var time = new Date("23/9/2015 00:00:00");【后台默认调用了Date.parse()或Date.UTC()方法，返回的是毫秒数】
+
+4.RegExp类型 模型var experssion = /pattern/flags;【以匹配第一个“bat”或“cat”,不区分大小写为例】
+	1)字面量定义：var patt = /[bc]at/i;
+	2)构造函数RegExp()：var patt = new RegExp("[bc]at","i");
+5.Function类型  	每个函数都是Function类型的实例，每个函数名都是指向函数对象的指针【从而也解释了为何在javascript中没有函数重载】
+	1）函数声明语法定义 function sum(num,num2){}
+	2)函数表达式定义 var sum = function(num1,num2){}; 【此处结尾要带有分号】
+	3)Function构造函数  var sum = new Function("num1","num2","return num1+num2"); 【最有一个参数始终被当作是函数体，而前面的参数则枚举出新函数的参数】
+ 函数内部含有两个特殊对象：arguments和this   【以及在ECMAScript5中新规范化的一个函数对象属性caller】
+	arguments:主要用途保存函数参数，但其含有一个callee的属性，指向arguments对象的函数
+		eg：function factorial(num){
+	  		if(num<=1){return 1;}
+		  	else {return num*arguments.callee(num-1);}
+		    }
+			var fld = factorial;
+			factorial = function(){return 0};
+			console.log(fld(4));
+	this:引用的是函数据以执行的环境对象
+	caller:该属性保存着调用当前函数的函数引用
+		eg：function outer(){inner();}
+		   function inner(){console.log(inner.caller);}  //函数体内容也可改为console.log(arguments.callee.caller)用来减小耦合
+		   outer();
+  每个函数包含两个属性：length和prototype 【length表名函数希望接收命名参数的个数】
+  每个函数包含两个非继承的方法：apply()和call()
+		apply()接收两个参数：一个是在其中运行函数的作用域，一个是参数数组
+		call()第一个参数是this，后面必须把传递给函数的参数逐个列举出来
+  bind()方法：用于创建一个函数的实例，其this值会被绑定到传给bind()函数的值
+
+6.基本包装类型
+	ECMAScript提供3个特殊的引用类型：Boolean, Number和String
+	使用new操作符创建的引用类型实例，在执行流离开当前作用域之前一直保存在内存中；自动创建的基本包装类型对象只存在一行代码执行瞬间，然后被销毁。
+	对基本包装类型的实例调用typeof会返回object，而且所有基本包装类型的对象都会被转换成布尔值 true；
+	1）Boolean 类型 【建议永远不要使用Boolean对象】
+	2）Number 类型
+		要创建一个Number对象，调用Number构造函数向其中传递相应数值。 var number = new Number(10);
+		toFixed()方法可按照指定的小数位返回数值的字符串表示	var num = 10;  console.log(num.toFixed(2));  //print  "10.00"
+		toExponential()返回以指数表示法表示数值的字符串
+		toPrecisioin()根据数值可能返回固定大小的格式，也可能返回指数格式
+			eg: var num = 99;  console.log(num.toPrecision(1));//"1e+2"
+			    console.log(num.toPrecision(2));//"99"	console.log(num.toPrecision(3));//"99.0"
+		【使用 typeof操作符测试基本类型数值时，始终返回“number”,而测试Number对象返回的是“Object”.另外Number对象是Number类型实例，而基本类型不是】
+	【不建议实例化Number类型】
+	3）String 类型  [使用String构造函数创建，每个实例包含一个length属性，表示字符串包含多个字符]
+		--字符方法
+			charAt()以单字符字符串形式返回给定位置的字符  var value="hello world!";  console.log(value.charAt(1));  //print "e";
+			charCodeAt()返回字符编码			console.log(value.charCodeAt(1));//print "101"; 
+			ECMAScript还定义了访问个别字符的方法，使用方括号加数字的方式  stringValue[1]; //print "e";
+		--字符串操作方法
+			concat()将一个或多个字符串拼接起来，不改变原来字符串。【实践中更多使用“+”操作符】
+			slice()，substr(),substring()  均不改变原来字符串
+				都接收两个参数，第一个是参数指定字符串的开始位置，第二个是结束位置。其中substr()第二个参数是指截取多少个字符
+				如不指定第二个参数，会将字符串的长度作为结束位置
+				对于负值的处理：slice会把负值和字符串长度相加，substr会把负的第一个参数和字符串长度相加，把负的第二个转为0；substring会把所有负值参数转为0；
+		--字符串位置方法
+			indexOf()和lastIndexOf()都是从一个字符串中搜索给定的子字符串，然后返回子字符串的位置(如果没有返回-1)
+		--trim()方法
+			该方法会创建一个字符串的副本，删除前置和后缀的所有空格，返回结果【版本高的浏览器还支持trimLeft()和trimRight()方法分别用于删除开头或结尾的空格】
+		--字符串大小写转化
+			toLowerCase(),toLocaleLowerCase(),toUpperCase(),toLocaleUpperCase()
+		--字符串模式匹配
+			match()方法和RegExp的exec()方法相同，接收一个参数，要么是正则表达式，要么是RegExp对象
+			search()方法接收和match一样的参数，只不过返回的是第一个匹配项的索引，如果没有则返回-1；
+			replace()接收两个参数用于替换子字符串，第一个是一个RegExp对象或一个字符串，第二个是一个字符串或函数
+				eg:var text = "cat,bat,sat,fat";	var result = text.replace("at","ond");
+				   console.log(result);//print "cond,bat,sat,fat"
+				   result = text.replace(/at/g,"ond");  console.log(result);//print "cond,bond,sond,fond"
+			localeCompare()接收一个参数，比较两个字符串
+				如果字符串在字母列表中排在字符串参数之前，返回一个负数（一般为-1）
+				如果字符串和字符串参数是相同的，则返回0
+				如果字符串在字母列表中排在字符串参数之后，返回一个正数
+				eg:var strVal = "yellow";   console(strVal.localeCompare("brick"));  //print 1;
+				   console.log(strVal.localeCompare("yellow");//print 0;
+ 				   console.log(strVal.localeCompare("zoo");//print -1;
+				function determineOrder(value){
+				  var result = stringVal.localeCompare(value);
+				  if(result<0){
+				    console.log("The string 'yellow' comes before the string '"+value+"'");
+				  }else if(result>0){
+				    console.log("The string 'yellow' comes after the string '"+value+"'");
+				  }else{
+				    console.log("The string 'yellow' is equal to the string '"+value+"'");
+				  }
+				}
+			fromCharCode()作用同charCodeAt()相反，是把传递进来的字符编码转化成字符串。
+		--HTML方法【尽量不使用这些方法】
+	4)单体内置对象【由ECMAScript实现提供的，不依赖于宿主环境的对象，意思开发人员不必显示实例化这些对象，可直接拿来用】 例如Object，Array和String
+		--Global对象
+			不属于任何对象的属性和方法，最终都是Global的属性和方法；
+			所有在全局作用域里定义的属性和方法，都是Global对象的属性
+			-URI编码方法 encodeURI()和encodeURIComponent()用于对URI进行编码
+				encodeURI()不会对本身属于URI的特殊字符进行编码，可应用到整个URI上 对应解码方法decodeURI()
+				encodeURIComponent()会对它发现的任何非标准字符进行编码，会使用编码把URI里所有非字母字符进行编码，仅可用于URI后面的字符串  对应解码方法decodeURIComponent()
+
+			-eval()方法【类似于ECMAScript解析器，接收一个参数，即要执行的ECMAScript字符串】
+				eg: var msg = "hello"  eval("alert(msg)");//print hello
+			可以通过以下方法获取Global对象
+			var global = function(){return this;}();
+		--window对象【可以通过window实现对Global对象的部分访问】
+		--Math对象【包含很多数学操作方法】下面的方法可以取得给定区间里任意一个值
+			eg: function selectFrom(lowerVal,upperVal){
+				var choices = upperVal-lowerVal+1;
+				return Math.floor(Math.random()*choices + lowerVal);
+			   }
+
+---Chapter 6 面向对象程序设计---
+	
+2.创建对象
+	--工厂模式  【不能很好的解决对象识别问题】
+		function createPerson(name,age,job){
+			var o = new Object();
+			o.name = name;	
+			o.age = age;
+			o.job = job;
+			o.sayName = function(){
+				alert(this.name);
+			};
+			return o;
+		}
+		var person1 = createPerson("Tom",23,"Engineer");
+	--构造函数模式 【不能很好的解决自定义引用封装性问题】
+		function Person(name,age,job){
+			this.name = name;
+			this.age = age;
+			this.job = job;
+			this.sayName = function(){
+				alert(this.name);
+			};
+		}
+		var person1= new Person("Tom",23,"Engineer");
+	--原型模式  【所有属性值都一样且被很多实例共享，在含有引用类型属性时会有大问题】
+		function Person(){}
+		Person.prototype.name = "Tom";
+		Person.prototype.age = 23;
+		Person.prototype.job = "Engineer";
+		Person.prototype.sayName = function(){
+			alert(this.name);
+		};
+	或者
+		function Person(){}
+		//在此默认是修改了原型对象prototype属性
+		Person.prototype = {
+			name:"Tom",
+			age:23,
+			job:"Engineer",
+			sayName:function(){alert(this.name);}
+		};	
+		var person1 = new Person();
+	--构造函数+原型 组合 【业界使用最普遍，认同度最高得分模式】
+		构造函数模式用于定义实例属性，原型模型用于定义方法和共享的属性。同时还支持向构造函数传递参数
+		function Person(name,age,job){
+			this.name = name;
+			this.age = age;
+			this.job = job;
+			this.friends= ["Tom","Sam"];
+		}
+		Person.prototype = {
+			constructor:Person;
+			sayName:function(){
+				console.log(this.name);
+			}
+		}
+
+3.继承	ECMAScript只支持实现继承，且依靠原型链来实现
+	1)原型链实现继承 【问题1：在包含引用类型值的时候所有实例均可对其访问;问题2：创建子类的实例时，不能向超类的构造函数中传递参数】
+	function SuperType(){this.property = true;}
+	SuperType.prototype.getSuperValue = function(){
+	  return this.property;
+	};
+
+	function SubType(){this.subproperty = false;}
+	SubType.prototype = new SuperType();
+	SubType.prototype.getSubValue = function(){
+	  return this.subproperty;
+	};
+
+	var instance = new SubType();
+	console.log(instance.getSuperValue());
+	2）借用构造函数【方法都在构造函数中定义，函数复用无从谈起】
+	在子类型构造函数的内部调用超类的构造函数
+	function SuperType(name){this.name= name; this.color = ["red","blue","green"];}
+	function SubType(){
+		SuperType.call(this,"Tom");
+		this.age = 23;
+	}
+	var instance = new SubType();
+	3）组合模式[业界最常用的继承模式]【问题是会重复调用父类构造方法，生成两组属性分别在实例和子类对象原型中】
+	function SuperType(name){this.name = name; this.color=["red","blue","green"];}
+	SuperType.prototype.sayName = function(){console.log(this.name);}; 
+	function SubType(name,age){SuperType.call(this,name);this.age = age;}
+	SubType.prototype = new SuperType();
+	SubType.prototype.constructor = SubType;
+	SubType.prototype.sayAge = function(){console.log(this.age);};
+
+	4)寄生组合式继承【普遍认为最理想的继承范式】
+	function object(o){
+		function F(){};
+		F.prototype = o;
+		return new F();
+	}
+	function inheritPrototype(subType,superType){
+		var prototype = object(superType.prototype);
+		prototype.constructor = subType;
+		subType.prototype = prototype;
+	}
+	//解决组合模式里的问题
+	function SuperType(name){this.name = name; this.color=["red","blue","green"];}
+	SuperType.prototype.sayName = function(){console.log(this.name);}; 
+	function SubType(name,age){SuperType.call(this,name);this.age = age;}
+	inheritPrototype(SubType,SuperType);
+	SubType.prototype.sayAge = function(){console.log(this.age);};
