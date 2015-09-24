@@ -1,0 +1,276 @@
+1.给浏览器添加自定义元素
+	在支持HTML5的浏览器中直接新建元素并添加样式即可
+	IE9版本以上的需要使用document.createElement("元素名")来添加新的元素
+	ie9版本以上的需要引入js对其进行处理【需放在head元素中】
+		<!--[if lt IE 9]>
+  		<script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+		<![endif]--> 
+
+2.新添加的元素
+--<canvas>标签定义图形，基于js的绘图API
+	fillStyle=""该属性可以是CSS颜色，渐变或图案
+	fillRect(x,y,width,height)定义矩形填充方式
+	
+	moveTo(x,y)定义线条的开始坐标
+	lineTo(x,y）定义线条结束坐标
+	stroke()绘制线条
+
+	arc(x,y,r,start,stop)绘制圆形
+	stroke()或fill()完成圆形绘制
+	eg:ctx.beginPath();
+	   ctx.arc(95,50,40,0,2*Math.PI);
+	   ctx.stroke();
+
+	绘制文本
+	eg:var ctx=c.getContext("2d");
+	   ctx.font="30px Arial";
+	   ctx.fillText("Hello World",10,50);//strokeText(text,x,y)绘制空心文本
+
+	渐变
+	   createLinearGradient(x,y,x1,y1) - 创建线条渐变
+ 	   createRadialGradient(x,y,r,x1,y1,r1) - 创建一个径向/圆渐变
+	eg:// Create gradient
+	var grd=ctx.createLinearGradient(50,0,200,0);
+	grd.addColorStop(0,"red");
+	grd.addColorStop(1,"white");
+
+	// Fill with gradient
+	ctx.fillStyle=grd;
+	ctx.fillRect(10,10,150,80);
+
+	绘制图像
+	eg:var c=document.getElementById("myCanvas");
+	   var ctx=c.getContext("2d");
+           var img=document.getElementById("scream");
+	   ctx.drawImage(img,10,10);
+
+--支持内联SVG(Scalable Vector Graphics)
+	eg:
+	<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="190">
+	  <polygon points="100,10 40,180 190,60 10,60 160,180"
+	  style="fill:lime;stroke:purple;stroke-width:5;fill-rule:evenodd;">
+	</svg>
+SVG是一种使用XML描述2D图形的语言，Canvas是通过js来绘制2D图形
+Canvas 						SVG
+
+依赖分辨率					不依赖分辨率
+不支持事件处理器					支持事件处理器
+弱的文本渲染能力					最适合带有大型渲染区域的应用程序（比如谷歌地图）
+能够以 .png 或 .jpg 格式保存结果图像		复杂度高会减慢渲染速度（任何过度使用 DOM 的应用都不快）
+最适合图像密集型的游戏，其中的许多对象会被频繁重绘	不适合游戏应用
+
+3.HTML5拖放(Drag和Drop)
+ 1）设置元素为可拖放，把元素draggable属性设置为true
+ 2）在被拖动的上设置ondragstart属性用来调用一个函数drag()，里面规定了被拖动的数据
+	eg:event.dataTransfer.setData("Text",ev.target.id);
+ 3)放到何处-ondragover
+    在要拖向的元素中设置属性ondragover并调用能设置阻止元素默认处理方式的方法
+	eg:event.preventDefault()
+ 4）进行放置-ondrop
+    在要向的元素中设置属性ondrop调用方法
+	eg:function drop(ev)
+	{
+	ev.preventDefault();
+	var data=ev.dataTransfer.getData("Text");
+	ev.target.appendChild(document.getElementById(data));
+	}
+    代码解释：
+
+    调用 preventDefault() 来避免浏览器对数据的默认处理（drop 事件的默认行为是以链接形式打开）
+    通过 dataTransfer.getData("Text") 方法获得被拖的数据。该方法将返回在 setData() 方法中设置为相同类型的任何数据。
+    被拖数据是被拖元素的 id ("drag1")
+    把被拖元素追加到放置元素（目标元素）中
+
+4.Geolocation(地理定位)
+getCurrentPosition()方法获取用户位置，有两个参数，一个获取位置信息，一个处理错误信息
+  1)定位用户位置
+	var x = document.getElementById("demo");
+	function getLocation(){
+	  if(navigator.geolocation){
+		navigator.geolocation.getCurrentPosition(showPosition,showError);
+	  }else{
+		x.innerHTML = "Geolocation is not supported by this browser.";
+	  }
+	}
+	function showPosition(position){
+	  //在指定元素内部填充经纬度信息
+	  x.innerHTML="Latitude:"+position.coords.latitude+
+	  "<br>Longitude:" + position.coords.longitude;
+	}
+	function showError(error){
+	 switch(error.code){
+	   case error.PERMISSION_DENIED:
+		x.innerHTML = "用户拒绝对获取地理位置的请求。"
+		break;
+	   case error.POSITION_UNAVAILABLE:
+		x.innerHTML = "位置信息是不可用的。"
+		break;
+	   case error.TIMEOUT:
+		x.innerHTML = "请求用户地理位置超时。"
+		break;
+	   case error.UNKNOW_ERRROR:
+		x.innerHTML = "未知错误。"
+		break;
+	  }
+	}    
+    2)在地图中显示结果(使用可访问经纬度的地图服务 百度或google)
+   function showPosition(position){
+	var latlon = position.coords.latitude+","+position.coords.longitude;
+	var img_url="http://maps.googleapis.com/maps/api/staticmap?center="
++latlon+"&zoom=14&size=400x300&sensor=false";
+	document.getElementById("mapholder").innerHTML="<img src='"+img_url+"'>";
+   }
+   3)使用watchPosition()返回用户的当期位置-最新位置信息
+	clearWatch()停止watchPosition()方法
+   	var x=document.getElementById("demo");
+	function getLocation()
+	  {
+	  if (navigator.geolocation)
+	    {
+	    navigator.geolocation.watchPosition(showPosition);
+	    }
+	  else{x.innerHTML="该浏览器不支持获取地理位置。";}
+	  }
+	function showPosition(position)
+	  {
+	  x.innerHTML="纬度: " + position.coords.latitude +
+	  "<br>经度: " + position.coords.longitude;
+	  }
+
+5.视频元素video
+	<video width="320" height="240" controls>
+	  <source src="movie.mp4" type="video/mp4">
+	  <source src="movie.ogg" type="video/ogg">
+	  <source src="movie.ogg" type="video/webm">
+	您的浏览器不支持Video标签。
+	</video> 
+  视频支持的格式有MP4，WebM和Ogg
+  可以使用js获取video元素后对其进行操作：开始，暂停，放大，缩小等。
+--音频元素audio
+	 <audio controls>
+	  <source src="horse.ogg" type="audio/ogg">
+	  <source src="horse.mp3" type="audio/mpeg">
+	您的浏览器不支持 audio 元素。
+	 </audio> 
+  音频支持的格式有MP3，Wav和Ogg
+
+6.HTML5 Input类型
+color:<input type="color" name="color_fav"> 可用于选取颜色[chrome&opera&firefox]
+data：<input type="date" name="day">从日期选择器选择一个日期[chrome&safari&opera]
+datatime:<input type="datetime" name="daytime">定义一个日期时间控制器[safari&opera]
+email:<input type="email" name="e-mail">自动验证 email 域的值是否合法有效【iphone中safari配合键盘完成】
+month:<input type="month" name="dayMonth">定义月和年[chrome&safari&opera]
+number 包含数值的输入域，可以设定限制:[chrome&safari&opera]
+	<input type="number" name="points" min="0" max="10" step="3" value="6">	
+    max- 规定允许的最大值
+    min - 规定允许的最小值
+    step - 规定合法的数字间隔（如果 step="3"，则合法的数是 -3,0,3,6 等）
+    value - 规定默认值
+range:<input type="range" name="points" min="1" max="10">根据设定值显示划块[chrome&safari&opera]
+
+    max - 规定允许的最大值
+    min - 规定允许的最小值
+    step - 规定合法的数字间隔
+    value - 规定默认值
+url:<input type="url" name="homepage">提交表单时自动验证url域的值【iphone中safari配合键盘完成】
+week:<input type="week" name="week_year">允许选择周和年[chrome&safari&opera]
+
+7.HTML5表单元素
+<datalist>元素规定输入域的选项列表，规定input或form域有自动完成功能[除safari]
+	<input list="browsers">
+
+	<datalist id="browsers">
+	  <option value="Internet Explorer">
+	  <option value="Firefox">
+	  <option value="Chrome">
+	  <option value="Opera">
+	  <option value="Safari">
+	</datalist> 
+<keygen>提供验证用户的可靠方法，用于表单密钥对生成器字段。提交表单时生成俩个健，一个私钥，一个公钥。[除IE外]
+	私钥（private key）存储于客户端，公钥（public key）则被发送到服务器。
+	公钥可用于之后验证用户的客户端证书（client certificate）
+
+	<form action="demo_keygen.asp" method="get">
+	用户名: <input type="text" name="usr_name">
+	加密: <keygen name="security">
+	<input type="submit">
+	</form> 
+<output>用于不同类型的输出【除IE外】
+	<form oninput="x.value=parseInt(a.value)+parseInt(b.value)">0
+	<input type="range" id="a" value="50">100 +
+	<input type="number" id="b" value="50">=
+	<output name="x" for="a b"></output>
+	</form>
+
+8.HTML5表单属性
+1）form属性
+	<form>/<input> autocomplete属性，使得form或input域有自动完成功能【除opera外】
+	意味提交表单后第二次填写会提示
+	 eg:<form action="demo-form.php" autocomplete="on">
+	  	First name:<input type="text" name="fname"><br>
+	 	 Last name: <input type="text" name="lname"><br>
+	  	E-mail: <input type="email" name="email" autocomplete="off"><br>
+	  	<input type="submit">
+	    <form>
+
+	<form>novalidate属性 规定在提交表单时不应该验证form或input域【除safari外】
+	eg:<form action="demo-form.php" novalidate>
+	  	E-mail: <input type="email" name="user_email">
+	  	<input type="submit">
+           </form> 
+2)input属性
+	--autofocus属性是boolean属性，规定在页面加载时域自动获取焦点
+	  First name:<input type="text" name="fname" autofocus>
+
+	--form属性规定输入域所属的一个或多个表单。如果引用一个以上的使用空格分割
+	eg：下面例子中form表单外的input字段引用了form，则其仍属于form的一部份
+	  <form action="demo-form.php" id="form1">
+	  	First name: <input type="text" name="fname"><br>
+	  	<input type="submit" value="Submit">
+	  </form>
+	  Last name: <input type="text" name="lname" form="form1">
+
+	--fromaction属性用于描述表单提交的URL地址，会屏蔽原来<form>元素的action属性
+	eg:用于type="submit"和type="image"
+	  <form action="demo-form.php">
+		  First name: <input type="text" name="fname"><br>
+		  Last name: <input type="text" name="lname"><br>
+		  <input type="submit" value="Submit"><br>
+		  <input type="submit" formaction="demo-admin.php"
+		  value="Submit as admin">
+	  </form> 
+	
+	--formenctype属性描述了提交到服务器的数据编码(指针对method="post"的表单)
+	eg:属性与 type="submit" 和 type="image" 配合使用。
+	<form action="demo-post_enctype.php" method="post">
+	  First name: <input type="text" name="fname"><br>
+	  <input type="submit" value="Submit">
+	  <input type="submit" formenctype="multipart/form-data"
+	  value="Submit as Multipart/form-data">
+	</form> 
+
+	--height和width属性，用于定义image类型input标签图像高度和宽度
+	eg:<input type="image" src="img_submit.gif" alt="Submit" width="48" height="48"> 
+
+	--list属性，结合datalist使用，用来规定datalist的输入域
+	eg:<input list="browsers">
+
+	<datalist id="browsers">
+	  <option value="Internet Explorer">
+	  <option value="Firefox">
+	  <option value="Chrome">
+	  <option value="Opera">
+	  <option value="Safari">
+	</datalist>
+
+	--min和max，step属性用于为包含数字或日期的input类型规定限定(之前的range，number元素都有用到)
+
+	--multiple属性规定<input>元素可选择多个值（适用余email和file）
+	eg:Select images: <input type="file" name="img" multiple>【可选多张图片】
+
+	--patter属性描述一个正则表达式用于验证<input>元素的值
+	eg:例子显示了一个只能包含三个字母的文本域（不含数字及特殊字符）：
+	Country code: 
+	<input type="text" name="country_code" pattern="[A-Za-z]{3}" title="Three letter country code">
+
+	--placeholder属性，简短的提示会显示在输入域上
