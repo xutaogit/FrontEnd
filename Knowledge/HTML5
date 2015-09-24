@@ -274,3 +274,8 @@ week:<input type="week" name="week_year">允许选择周和年[chrome&safari&ope
 	<input type="text" name="country_code" pattern="[A-Za-z]{3}" title="Three letter country code">
 
 	--placeholder属性，简短的提示会显示在输入域上
+	eg:适用于以下类型的 <input> 标签：text, search, url, telephone, email 以及 password。
+	  <input type="text" name="fname" placeholder="First name">
+
+	--require属性是一个boolean属性，规定必须在提交之前填写输入域（不能为空）
+	eg: Username: <input type="text" name="usrname" required>
