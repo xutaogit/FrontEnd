@@ -1,7 +1,7 @@
 1.给浏览器添加自定义元素
 	在支持HTML5的浏览器中直接新建元素并添加样式即可
 	IE9版本以上的需要使用document.createElement("元素名")来添加新的元素
-	ie9版本以上的需要引入js对其进行处理【需放在head元素中】
+	ie9版本以下的需要引入js对其进行处理【需放在head元素中】
 		<!--[if lt IE 9]>
   		<script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
 		<![endif]--> 
@@ -23,7 +23,7 @@
 
 	绘制文本
 	eg:var ctx=c.getContext("2d");
-	   ctx.font="30px Arial";
+	   ctx.font="30px Arial";//定义字号及字型
 	   ctx.fillText("Hello World",10,50);//strokeText(text,x,y)绘制空心文本
 
 	渐变
@@ -279,3 +279,50 @@ week:<input type="week" name="week_year">允许选择周和年[chrome&safari&ope
 
 	--require属性是一个boolean属性，规定必须在提交之前填写输入域（不能为空）
 	eg: Username: <input type="text" name="usrname" required>
+
+9.HTML5语义元素【以下列举的均为块级标签元素，除figcaption外】
+--以防万一，可以在样式表中先定义一下语句，是为了适应旧版本浏览器
+header, section, footer, aside, nav, article, figure
+{
+display: block;
+} 
+
+--为了让IE8及以下版本浏览器可以使用HTML5元素，可以使用shiv。
+HTML5 Shiv下载地址：http://code.google.com/p/html5shiv/
+而后引用(必须放置在head标签中)
+<!--[if lt IE 9]>
+<script src="html5shiv.js"></script>
+<![endif]--> 
+
+<section>元素定义文档中的节
+<article>元素定义独立的内容
+<nav>元素定义导航链接的部分
+<aside>元素定义页面主区域之外的内容(如侧边栏)
+<header>元素描述文档的头部区域 (在页面中可以定义使用多个header元素)
+<footer>元素描述文档的底部区域，包含文档的作者，著作权信息，链接的使用条款，联系信息登
+<figure>元素定义独立的流内容(图像，图表，照片，代码等等)
+	该元素定义的内容应该和主内容相关，但如果被删除，则不应对文档流产生影响
+<figcaption>标签定义<figure>元素的标题，应放置在“figure”元素的第一个或最后一个子元素位置
+
+10.HTML5 Web存储 【是一种比cookie更好的本地存储方式】
+1)localStorage-没有时间限制的数据存储
+  sessionStorage-针对一个session的数据存储
+ 使用web存储前，要先检查浏览器是否支持这俩个对象(两个对象含有一些自己的属性)
+  eg:if(typeof(Storage)!=="undefined"){
+	//Yes! support
+	//some code....
+     }else{
+	//Sorry! No web storage support...
+     }
+2.localStorage对象【该对象存储的数据没有时间限制，长时间可以进行访问】
+  eg:localStorage.lastName = "Smith";
+     document.getElementById("result").innerHTML = localStorage.lastName;
+3.sessionStorage对象 【针对一个session对象进行存储，当用户关闭浏览器窗口数据被删除】
+  eg:if(sessionStorage.clickcount){
+	sessionStorage.clickcount = Number(sessionStorage.clickcount)+1;
+    }else{
+	sessionStorage.clickcount =1 ;
+    }
+  document.getElementById("result").innerHTML= "You have clicked ths button"+
+	sessionStorage.clickcount +"thim(s) in this session.";
+
