@@ -1,0 +1,235 @@
+【出自imooc网站】
+》jQuery常用插件整理
+
+--1--表单验证插件 <script type="text/javascript" src="http://www.imooc.com/data/jquery.validate.js"></script>
+        	<script type="text/javascript" src="http://www.imooc.com/data/jquery.validate.messages_cn.js"></script>【用于中文显示】
+  --验证邮箱是否为空和格式是否正确
+  $(function () {
+	$("#frmV").validate(
+	  {
+	      /*自定义验证规则*/
+	      rules: {
+		    email:{
+		        required:true,
+		        email:true
+		    }
+	      },
+	      /*错误提示位置*/
+	      errorPlacement: function (error, element) {
+		  error.appendTo(".tip");
+	      }
+	  }
+       );
+  });
+
+--2--表单form插件 <script type="text/javascript" src="http://www.imooc.com/data/jquery.form.js"></script>
+ --ajaxForm()方法向服务器发送录入的用户名和密码数据，服务器接收后返回并显示在页面中
+ $(function () {
+        var options = {
+            url: "http://www.imooc.com/data/form_f.php", 
+            target: ".tip"
+        }
+        $("#frmV").ajaxForm(options);
+ });
+
+--3--图片灯箱插件  <script type="text/javascript" src="http://www.imooc.com/data/jquery.notesforlightbox.js"></script>
+格式：$(linkimage).lightBox({options})
+其中linkimage参数为包含图片的<a>元素名称，options为插件方法的配置对象。
+/----HTML格式 start---/
+<div>
+    <ul>
+	<li><a href="###" title=""><img src="" alt=""/></a></li>
+    </ul>
+</div>
+/----HTML格式 end---/
+$(function () {
+	$(".divPics a").lightBox({
+	    overlayBgColor: "#666", //图片浏览时的背景色
+	    overlayOpacity: 0.5, //背景色的透明度
+	    containerResizeSpeed: 600 //图片切换时的速度
+	})
+});
+
+--4--图片放大镜插件 <script type="text/javascript" src="http://www.imooc.com/data/jquery.jqzoom.js"></script>
+格式：$(linkimage).jqzoom({options})
+其中linkimage参数为包含图片的<a>元素名称，options为插件方法的配置对象。
+
+$(function () {
+	$("#jqzoom").jqzoom({ //绑定图片放大插件jqzoom
+	    zoomWidth: 123, //小图片所选区域的宽
+	    zoomHeight: 123, //小图片所选区域的高
+	    zoomType: 'reverse' //设置放大镜的类型
+	});
+});
+
+--5--cookie插件 <script src="http://www.imooc.com/data/jquery.cookie.js" type="text/javascript"></script>
+格式：保存：$.cookie(key，value)；读取：$.cookie(key)，删除：$.cookie(key，null)
+
+其中参数key为保存cookie对象的名称，value为名称对应的cookie值。
+<input id="email" name="email" type="text" /><br />
+<input id="chksave" type="checkbox" />是否保存邮箱
+    $(function () {
+        if ($.cookie("email")) {
+            $("#email").val($.cookie("email"));
+        }
+        $("#btnSet").bind("click", function () {
+            if ($("#chksave").is(":checked")) {
+                $.cookie("email",$("#email").val(), {
+                    path: "/", expires: 7
+                })
+            }
+            else {
+                $.cookie("email",null, {
+                    path: "/"
+                })
+            }
+        });
+    });
+
+--6--文本框自动匹配  <script src="http://www.imooc.com/data/jquery.autocomplete.js" type="text/javascript"></script>
+格式：$(textbox).autocomplete(urlData,[options]);
+
+其中，textbox参数为文本框元素名称，urlData为插件返回的相近字符串数据，可选项参数options为调用插件方法时的配置对象。
+
+    $(function () {
+        var arrUserName = ["王五", "刘明", "李小四", "刘促明", "李渊", "张小三", "王小明"];
+        $("#txtSearch").autocomplete(arrUserName,{
+            minChars: 0, //双击空白文本框时显示全部提示数据
+            formatItem: function (data, i, total) {
+                return "<I>" + data[0] + "</I>"; //改变匹配数据显示的格式
+            },
+            formatMatch: function (data, i, total) {
+                return data[0];
+            },
+            formatResult: function (data) {
+                return data[0];
+            }
+        }).result(SearchCallback); 
+        function SearchCallback(event, data, formatted) {
+            $(".tip").show().html("您的选择是：" + (!data ? "空" : formatted));
+        }
+    });
+
+--7--右键菜单插件 <script src="http://www.imooc.com/data/jquery.contextmenu.js" type="text/javascript"></script>
+右键菜单插件可以绑定页面中的任意元素，绑定后，选中元素，点击右键，便通过该插件弹出一个快捷菜单，点击菜单各项名称执行相应操作，调用代码如下：
+
+$(selector).contextMenu(menuId,{options});
+
+Selector参数为绑定插件的元素，meunId为快捷菜单元素，options为配置对象。
+<div id="divtest">
+    <div class="title"><span class="fl">点击右键</span></div>
+    <div class="content">
+        <input id="btnSubmit" type="button" value="提交" />
+        <div class="tip"></div>
+    </div>
+    <div class="contextMenu" id="sysMenu">
+        <ul>
+            <li id="Li3"><img src="http://img.mukewang.com/52e4b34b0001bb6d00160016.jpg" alt="" />保存</li>
+            <li id="Li4"><img src="http://img.mukewang.com/52e4b3680001424900160016.jpg" alt="" />退出</li>
+        </ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#btnSubmit").contextMenu("sysMenu",
+          { bindings:
+             {
+                 'Li3': function (Item) {
+                     $(".tip").show().html("您点击了“保存”项");
+                 },
+                 'Li4': function (Item) {
+                     $(".tip").show().html("您点击了“退出”项");
+                 }
+             }
+          });
+    });
+</script>
+
+--8--自定义对象插件【更改默认li的背景颜色】 <script src="http://www.imooc.com/data/jquery.lifocuscolor.js" type="text/javascript"></script>
+格式：$(Id).focusColor(color)
+
+其中，参数Id表示<ul>元素的Id号，color表示<li>元素选中时的背景色。
+$("ul").focusColor("gray");
+
+--9--自定义类级别插件 twoaddresult 【可以对任意两个数值进行相加或相减运算】<script src="http://www.imooc.com/data/jquery.twoaddresult.js" type="text/javascript"></script>
+格式：$.addNum(p1,p2) 和 $.subNum(p1,p2)
+
+上述调用格式分别为计算两数值相加和相减的结果，p1和p2为任意数值。
+
+$("#btnCount").bind("click", function () {
+    $("#Text3").val(
+        $.subNum($("#Text1").val(),$("#Text2").val())
+    );
+});
+
+》jQuery的UI型插件【均为1.9版本以上jquery UI自带功能】<script src="http://www.imooc.com/data/jquery-ui-1.9.2.min.js" type="text/javascript"></script>
+
+--1-- 拖拽插件 draggable
+$(selector). draggable({options})
+
+options参数为方法调用时的配置对象，根据该对象可以设置各种拖曳效果，如“containment”属性指定拖曳区域，“axis”属性设置拖曳时的坐标方向。
+    $(function () {
+        $("#x").draggable({containment:"parent",axis:"x"});
+        $("#y").draggable({axis:"y"});
+    });
+
+--2--放置插件 droppable
+格式：$(selector).droppable({options})
+
+selector参数为接收拖曳元素，options为方法的配置对象，在对象中，drop函数表示当被接收的拖曳元素完全进入接收元素的容器时，触发该函数的调用。
+    $(function () {
+        var intNum = 0;
+        $(".drag").draggable();
+        $(".cart").droppable({
+            drop: function () {
+                    intNum++;
+                    $(this).addClass("focus").find("#tip").html("");  
+                    $(".title span").html(intNum);
+            }
+        })
+    });
+
+--3--拖拽排序插件 sortable 拖曳排序插件的功能是将序列元素（例如<option>、<li>）按任意位置进行拖曳从而形成一个新的元素序列，实现拖曳排序的功能
+格式：$(selector).sortable({options});
+
+selector参数为进行拖曳排序的元素，options为调用方法时的配置对象，
+$("ul").sortable({
+    delay:2,//设置延时以区分鼠标点击
+    opacity:0.4//设置透明度用于在拖拽过程中展示
+})
+
+--4-- 面板折叠插件 accordion 即点击标题时展开内容，再点另一标题时，关闭已展开的内容
+格式如下：
+
+$(selector).accordion({options});
+
+其中，参数selector为整个面板元素，options参数为方法对应的配置对象。
+
+--5--选项卡插件 tabs 使用选项卡插件可以将<ul>中的<li>选项定义为选项标题，在标题中，再使用<a>元素的“href”属性设置选项标题对应的内容
+格式：$(selector).tabs({options});
+
+selector参数为选项卡整体外围元素，该元素包含选项卡标题与内容，options参数为tabs()方法的配置对象，通过该对象还能以ajax方式加载选项卡的内容
+<ul>
+    <li><a href="#tabs-1">最爱吃的水果</a></li>
+    <li><a href="#tabs-2">最喜欢的运动</a></li>
+</ul>
+<div id="tabs-1">
+    <p>橘子</p>
+    <p>香蕉</p>
+</div>
+<div id="tabs-2">
+    <p>足球</p>
+    <p>散步</p>
+</div>
+$(function () {
+	$("#tabs").tabs ({
+	    //设置各选项卡在切换时的动画效果
+	    fx: { opacity: "toggle", height: "toggle" },
+	    event: "mousemove" //通过移动鼠标事件切换选项卡
+	})
+});
+
+--6--菜单工具插件  menu() 通过<ul>创建多级内联或弹出式菜单
+--7--微调按钮插件  spinner()
+--8--工具提示插件  tooltip()
