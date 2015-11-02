@@ -1,4 +1,4 @@
-【出自imooc网站】
+﻿【出自imooc网站】
 》jQuery常用插件整理
 
 --1--表单验证插件 <script type="text/javascript" src="http://www.imooc.com/data/jquery.validate.js"></script>
